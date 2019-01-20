@@ -61,7 +61,7 @@ def save_data(bowlings_df, file_path):
     file_path: str
         A path including the name of the file to save the data.
     """
-    bowlings_df.to_csv(file_path, index=False)
+    bowlings_df.to_csv(file_path, index=False, quoting=1)
     
 
 def main(num, file_path):
@@ -82,6 +82,6 @@ def main(num, file_path):
     
 
 if __name__== "__main__":
-    main(5000, 'bowling_data_5000.csv')
+    main(50000, 'bowling_data_50000.csv')
     
 
