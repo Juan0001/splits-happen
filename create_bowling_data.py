@@ -16,6 +16,9 @@ def create_data(num):
     bowlings: list of lists
         A list of lists with sequence of rolls from one game and its corresponding sore.
     """
+
+    # random.seed(1)  # Initialize for repetitive results when debugging
+
     bowlings = []
     calculator = BowlingScoreCalculator()
     for i in range(num):
@@ -82,6 +85,6 @@ def main(num, file_path):
     
 
 if __name__== "__main__":
-    main(50000, 'bowling_data_50000.csv')
+    main(5000, 'bowling_data_5000.csv')
     
 

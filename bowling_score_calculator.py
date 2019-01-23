@@ -102,12 +102,14 @@ class BowlingScoreCalculator:
         """
         # set the start score to 0
         score = 0
+        frame = 1
+        roll = 1
         # get the total length of the rolls
         l = len(trans_rolls)
         r = trans_rolls
         for i in range(l):
             # check if it's the third roll from backwards
-            if i < l - 3:
+            if frame < 10:
                 # check if it's strike
                 if r[i] == 10:
                     # if its strike, add current score and score in next two rolls
@@ -117,27 +119,50 @@ class BowlingScoreCalculator:
                         score += r[i] + 10
                     else:
                         score += r[i] + r[i+1] + r[i+2]
+                    frame += 1
+
                 # check if it's spare
                 elif r[i] == '/':
                     # if it's spare, add current score and score in next one roll
                     score += (10 - r[i-1]) + r[i+1]
+                    frame += 1
+                    roll = 1
                 else:
                     # if its neither strike nor spare, just add the current score
                     score += r[i]
-            elif i == l - 3:
+                    if roll == 2:
+                        frame += 1
+                        roll = 1
+                    else:
+                        roll += 1
+            else:  # last frame
                 # check if the last turn is a spare
-                if r[i+1] == '/':
+                if i+1 < l and r[i+1] == '/':
                     # if it's a spare, add 10 to the last score  
                     score += 10 + r[i+2]
                 # check if the second last is a spare
                 elif r[i] == '/':
                     # if it's a spare, add the next roll, and add the last two rolls
-                    score += (10-r[i-1]) + r[i+1] + r[i+1] + r[i+2]
+                    score += (10-r[i-1])
+                    if i+1 < l:
+                        score += r[i+1]
+                        if i+2 < l:
+                            score += r[i+2]
                 else:
                     # if it's not a spare, just add all the scores
-                    score += r[i] + r[i+1] + r[i+2]
+                    if i + 1 < l:
+                        score += r[i] + r[i+1]
+                        if i + 2 < l:
+                            score += r[i+2]
+
+                break # final frame is fully scored
 
         return score
+
+    def seq_score(self, seq):
+        rolls = self.tokenize_seq(seq)
+        trans_rolls = self.transform_symbol(rolls)
+        return self.calculate_score(trans_rolls)
 
 def main():
     """
@@ -172,4 +197,3 @@ def main():
 
 if __name__== "__main__":
     main()
-    
