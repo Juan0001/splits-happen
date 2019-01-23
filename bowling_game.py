@@ -12,14 +12,17 @@
 
 import random
 
+
 class BowlingGame:
     """
     To mimic playing the American Ten-Pin Bowling game.
     """
+
     def __init__(self):
         pass
 
-    def _strike(self):
+    @staticmethod
+    def _strike():
         """
         A strike roll, marked as 'X'.
 
@@ -41,7 +44,7 @@ class BowlingGame:
         scores: str
             This is a two character string to record the score of the play.
         """
-        frame_1 = random.randint(0,9)
+        frame_1 = random.randint(0, 9)
         if frame_1 == 0:
             scores = '-' + '/'
         else:
@@ -59,7 +62,7 @@ class BowlingGame:
             This is a two character string to record the score of the play.
         """
         frame_1 = random.randint(0, 9)
-        frame_2 = random.randint(0, 9-frame_1)  # the 2nd roll has a maximum of 9 minus first roll
+        frame_2 = random.randint(0, 9 - frame_1)  # the 2nd roll has a maximum of 9 minus first roll
 
         if frame_1 == 0:
             scores = '-' + str(frame_2)
@@ -153,8 +156,10 @@ def one_game():
 
     return ''.join(roll_sequence)
 
+
 def main():
     print(one_game())
 
-if __name__== "__main__":
+
+if __name__ == "__main__":
     main()
