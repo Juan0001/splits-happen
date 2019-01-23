@@ -2,6 +2,7 @@ from bowling_score_calculator import BowlingScoreCalculator
 import bowling_game
 import pandas as pd
 
+
 def create_data(num):
     """
     Create bowling game data.
@@ -16,6 +17,9 @@ def create_data(num):
     bowlings: list of lists
         A list of lists with sequence of rolls from one game and its corresponding sore.
     """
+
+    # random.seed(1)  # Initialize for repetitive results when debugging
+
     bowlings = []
     calculator = BowlingScoreCalculator()
     for i in range(num):
@@ -25,9 +29,10 @@ def create_data(num):
         score = calculator.calculate_score(trans_rolls)
         bowling = [sequence, score]
         bowlings.append(bowling)
-    
+
     return bowlings
-    
+
+
 def make_dataframe(bowlings):
     """
     Put the bowling game data into a pandas dataframe.
@@ -44,9 +49,10 @@ def make_dataframe(bowlings):
         A pandas dataframe with sequence of rolls from one game 
         and its corresponding sore in each column.
     """
-    columns=['Sequence', 'Score']
+    columns = ['Sequence', 'Score']
     bowlings_df = pd.DataFrame(bowlings, columns=columns)
     return bowlings_df
+
 
 def save_data(bowlings_df, file_path):
     """
@@ -61,8 +67,8 @@ def save_data(bowlings_df, file_path):
     file_path: str
         A path including the name of the file to save the data.
     """
-    bowlings_df.to_csv(file_path, index=False)
-    
+    bowlings_df.to_csv(file_path, index=False, quoting=1)
+
 
 def main(num, file_path):
     """
@@ -79,9 +85,7 @@ def main(num, file_path):
     bowlings = create_data(num)
     bowlings_df = make_dataframe(bowlings)
     save_data(bowlings_df, file_path)
-    
 
-if __name__== "__main__":
+
+if __name__ == "__main__":
     main(5000, 'bowling_data_5000.csv')
-    
-

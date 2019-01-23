@@ -12,14 +12,17 @@
 
 import random
 
+
 class BowlingGame:
     """
     To mimic playing the American Ten-Pin Bowling game.
     """
+
     def __init__(self):
         pass
 
-    def _strike(self):
+    @staticmethod
+    def _strike():
         """
         A strike roll, marked as 'X'.
 
@@ -41,7 +44,7 @@ class BowlingGame:
         scores: str
             This is a two character string to record the score of the play.
         """
-        frame_1 = random.randint(0,9)
+        frame_1 = random.randint(0, 9)
         if frame_1 == 0:
             scores = '-' + '/'
         else:
@@ -58,16 +61,15 @@ class BowlingGame:
         scores: str
             This is a two character string to record the score of the play.
         """
-        frame_1 = random.randint(0,9)
-        frame_2 = random.randint(0,9)
-        total = frame_1 + frame_2
+        frame_1 = random.randint(0, 9)
+        frame_2 = random.randint(0, 9 - frame_1)  # the 2nd roll has a maximum of 9 minus first roll
 
-        if total > 9:
-            frame_2 = str(random.randint(0,9))
-        elif frame_1 == 0:
+        if frame_1 == 0:
             scores = '-' + str(frame_2)
         elif frame_2 == 0:
             scores = str(frame_1) + '-'
+        else:
+            scores = str(frame_1) + str(frame_2)
 
         return scores
 
@@ -86,10 +88,10 @@ class BowlingGame:
         _none(): function
             If it's neither strike nor spare.
         """
-        score_type = random.randint(0,1)
-        if score_type == 0:
+        score_type = random.choice(['strike', 'spare', 'normal'])
+        if score_type == 'strike':
             return self._strike()
-        elif score_type == 1:
+        elif score_type == 'spare':
             return self._spare()
         else:
             return self._none()
@@ -105,30 +107,36 @@ class BowlingGame:
             This is a two or three character string to record the score of the
             last play.
         """
-        score_type = random.randint(0,1)
-        if score_type == 0:
-            roll_1 = str(random.randint(0,10))
-            roll_2 = str(random.randint(0,10))
+        score_type = random.choice(['strike', 'spare', 'normal'])
+        if score_type == 'strike':
+            roll_1 = random.randint(0, 10)
 
-            if roll_1 == 10:
-                roll_1 = 'X'
-            elif roll_1 == 0:
-                roll_1 = '-'
+            if roll_1 != 10:
+                roll_2 = random.randint(0, 10 - roll_1)
+                roll_2 = self.transform(str(roll_2))
+                roll_1 = self.transform(str(roll_1))
+                total_score = self._strike() + roll_1 + roll_2
+            else:
+                roll_1 = self.transform(str(roll_1))
+                total_score = self._strike() + roll_1
 
-            if roll_2 == 10:
-                roll_2 = 'X'
-            elif roll_2 == 0:
-                roll_2 = '-'
-
-            total_score = self._strike() + roll_1 + roll_2
-
-        elif score_type == 1:
-            roll = str(random.randint(0,10))
+        elif score_type == 'spare':
+            roll = str(random.randint(0, 10))
+            roll = self.transform(roll)
             total_score = self._spare() + roll
+
         else:
             total_score = self._none()
 
         return total_score
+
+    def transform(self, roll):
+        if roll == '10':
+            roll = self._strike()
+        elif roll == '0':
+            roll = '-'
+        return roll
+
 
 def one_game():
     """
@@ -148,8 +156,10 @@ def one_game():
 
     return ''.join(roll_sequence)
 
+
 def main():
     print(one_game())
 
-if __name__== "__main__":
+
+if __name__ == "__main__":
     main()
